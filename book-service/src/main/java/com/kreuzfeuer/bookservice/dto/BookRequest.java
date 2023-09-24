@@ -1,5 +1,6 @@
 package com.kreuzfeuer.bookservice.dto;
 
+import com.kreuzfeuer.bookservice.entity.Book;
 import com.kreuzfeuer.bookservice.entity.enums.BookRating;
 import com.kreuzfeuer.bookservice.entity.enums.BookStatus;
 import lombok.Value;
@@ -16,4 +17,11 @@ public class BookRequest {
 
     BookRating rating;
 
+    public static Book mappingToBook(BookRequest bookRequest){
+        return new Book(bookRequest.getBookName(),
+                bookRequest.getAuthor(),
+                bookRequest.getDescription(),
+                bookRequest.getStatus(),
+                bookRequest.getRating());
+    }
 }

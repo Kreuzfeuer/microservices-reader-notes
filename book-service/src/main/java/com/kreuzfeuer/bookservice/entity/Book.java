@@ -38,4 +38,12 @@ public class Book {
     private void init(){
         dateAdded = LocalDate.now();
     }
+
+    public Book(String bookName, String author, String description, BookStatus status, BookRating rating) {
+        this.bookName = bookName;
+        this.author = author;
+        this.description = description;
+        this.status = status;
+        this.rating = rating;
+    }
 }
