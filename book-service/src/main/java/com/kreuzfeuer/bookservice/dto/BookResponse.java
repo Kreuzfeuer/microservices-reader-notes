@@ -11,6 +11,8 @@ import java.time.LocalDate;
 @Value
 @Builder
 public class BookResponse {
+    Long id;
+
     String bookName;
 
     String author;
@@ -23,16 +25,17 @@ public class BookResponse {
 
     BookRating rating;
 
-    public static BookResponse mappingFromBook(Book book){
-        return book == null ?  null:
+    public static BookResponse mappingFromBook(Book book) {
+        return book == null ? null :
                 BookResponse.builder()
-                .bookName(book.getBookName())
-                .author(book.getAuthor())
-                .dateAdded(book.getDateAdded())
-                .description(book.getDescription())
-                .status(book.getStatus())
-                .rating(book.getRating())
-                .build();
+                        .id(book.getId())
+                        .bookName(book.getBookName())
+                        .author(book.getAuthor())
+                        .dateAdded(book.getDateAdded())
+                        .description(book.getDescription())
+                        .status(book.getStatus())
+                        .rating(book.getRating())
+                        .build();
 
     }
 }

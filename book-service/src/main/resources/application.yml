@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: book-service
+  datasource:
+    url: jdbc:postgresql://localhost:5433/microservice_test
+
+    username: postgres
+    password: 148
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  security:
+    oauth2:
+      resource-server:
+        jwt:
+          issuer-uri: http://localhost:8880/realms/microservice-reader-notes
+
+server:
+  port: 0
+
+
+#Discovery clients settings
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+#

@@ -14,7 +14,6 @@ import java.util.List;
 @RestController()
 @RequestMapping("/book-service")
 @RequiredArgsConstructor
-
 public class BasicBookController {
 
     private final BookService bookService;
@@ -24,19 +23,28 @@ public class BasicBookController {
     public ResponseEntity<List<BookResponse>> getAllBooks(Principal principal) {
 
         List<Book> listBook = bookService.getListBookByUserId(principal.getName());
+
         return ResponseEntity.ok(listBook.stream().map(BookResponse::mappingFromBook).toList());
 
     }
-    //TODO: A successful response MUST be 200 (OK) if the server response includes a message body,
-    // 202 (Accepted) if the DELETE action has not yet been performed,
-    // or 204 (No content) if the DELETE action has been completed
-    // but the response does not have a message body
-    @DeleteMapping("/book-delete/{id}")
-    public ResponseEntity<BookResponse> deleteBook(@PathVariable("id") Long id, Principal principal) {
 
-        return ResponseEntity.ok(BookResponse.mappingFromBook(bookService.deleteBookByIdAndUserId(id, principal.getName())));
+    @GetMapping("/hello")
+    public ResponseEntity<String> helloMethod(Principal principal) {
+
+
+        return ResponseEntity.ok(principal.getName());
 
     }
+
+    @DeleteMapping("/book-delete/{id}")
+    public ResponseEntity<?> deleteBook(@PathVariable("id") Long id, Principal principal) {
+        if (bookService.deleteBookByIdAndUserId(id, principal.getName()) == 0) {
+            return ResponseEntity.status(204).build();
+        }
+        return ResponseEntity.status(202).build();
+
+    }
+
     //TODO: ResponseStatus
     @PostMapping("/book-add")
     public ResponseEntity<BookResponse> addBook(@RequestBody BookRequest bookRequest, Principal principal) {
@@ -55,7 +63,7 @@ public class BasicBookController {
     @PutMapping("/book-update/{id}")
     public ResponseEntity<BookResponse> updateBook(@PathVariable("id") Long id, @RequestBody BookRequest bookRequest, Principal principal) {
 
-        Book savedBook = bookService.saveWithUserId(BookRequest.mappingToBook(bookRequest), principal.getName());
+        Book savedBook = bookService.putBookWithIdAndUserLogin(id, BookRequest.mappingToBook(bookRequest), principal.getName());
         return ResponseEntity.ok(BookResponse.mappingFromBook(savedBook));
     }
 

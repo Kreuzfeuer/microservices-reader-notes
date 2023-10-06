@@ -34,6 +34,8 @@ public class Book {
     @Column(nullable = false)
     private String userId;
 
+
+
     @PrePersist
     private void init(){
         dateAdded = LocalDate.now();
@@ -45,5 +47,10 @@ public class Book {
         this.description = description;
         this.status = status;
         this.rating = rating;
+        this.dateAdded = LocalDate.now();
+    }
+
+    public Book() {
+
     }
 }
