@@ -17,7 +17,7 @@ public class BookRequest {
 
     BookRating rating;
 
-    public static Book mappingToBook(BookRequest bookRequest){
+    public static Book mappingToBook(BookRequest bookRequest) {
         return new Book(bookRequest.getBookName(),
                 bookRequest.getAuthor(),
                 bookRequest.getDescription(),

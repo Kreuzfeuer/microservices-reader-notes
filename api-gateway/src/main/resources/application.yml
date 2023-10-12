@@ -8,6 +8,10 @@ spring:
           uri: lb://book-service/book-service/
           predicates:
             - Path=/book-service/**
+        - id: book-search-service
+          uri: lb://book-search-service/api/v1/
+          predicates:
+            - Path=/book-search/**
       default-filters: TokenRelay=
   security:
     oauth2:

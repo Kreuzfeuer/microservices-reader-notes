@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: book-search-service
+server:
+  port: 0
+
+
+#Discovery clients settings
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+#Hapi Books api
+
+rapidApi:
+  uri: "https://hapi-books.p.rapidapi.com/search/"
+  headers:
+    key: 24301918e9msh9d3679d0bbc2bfep14b33ajsn3790aaeac139
+    host: hapi-books.p.rapidapi.com
