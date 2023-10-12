@@ -15,6 +15,6 @@
 7) *** Maybe Kubernets
 
 ### Application explanation
-At the moment, two functional services are ready (Book service and book-search service)
-Book service - a service for working with your notes about books. It uses your nickname to save and work with notes.
-Book search service - a service for using an external API with a connection to Goodreads.com.
+At the moment, two functional services are ready :
+1) Book service - a service for working with your notes about books. It uses your nickname to save and work with notes.
+2) Book search service - a service for using an external API with a connection to Goodreads.com.  I am using [this API](https://rapidapi.com/roftcomp-laGmBwlWLm/api/hapi-books).
