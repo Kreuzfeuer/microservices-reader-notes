@@ -16,15 +16,24 @@ spring:
       resource-server:
         jwt:
           issuer-uri: http://localhost:8880/realms/microservice-reader-notes
+  kafka:
+    bootstrap-servers: localhost:9092
+    template:
+      default-topic: plannedBookTopic
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring:
+          json:
+            type:
+              mapping:
+                event:com.kreuzfeuer.bookservice.event.AddPlannedBookEvent
 
 server:
   port: 0
 
 
 #Discovery clients settings
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka
 
-#
+

@@ -2,11 +2,14 @@ package com.kreuzfeuer.bookservice.service.impl;
 
 import com.kreuzfeuer.bookservice.dto.BookSearchRequest;
 import com.kreuzfeuer.bookservice.entity.Book;
+import com.kreuzfeuer.bookservice.entity.enums.BookStatus;
+import com.kreuzfeuer.bookservice.event.AddPlannedBookEvent;
 import com.kreuzfeuer.bookservice.opeignclient.BookSearchClient;
 import com.kreuzfeuer.bookservice.repository.BookRepository;
 import com.kreuzfeuer.bookservice.service.BookService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +20,7 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final BookSearchClient bookSearchClient;
+    private final KafkaTemplate<String, AddPlannedBookEvent> kafkaTemplate;
 
     public List<Book> getListBookByUserId(String userId) {
         return bookRepository.getAllBookByUserId(userId);
@@ -28,6 +32,11 @@ public class BookServiceImpl implements BookService {
     }
 
     public Book saveWithUserId(Book book, String userId) {
+        if (book.getStatus() == BookStatus.PLANNED) {
+            kafkaTemplate.send("plannedBookTopic", new AddPlannedBookEvent(userId,
+                    "You have added a book \"" + book.getBookName()
+                            + "\" with the status planned! Don't forget to read this book!"));
+        }
         book.setUserId(userId);
         return bookRepository.save(book);
     }

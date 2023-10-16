@@ -1,11 +1,11 @@
 package com.kreuzfeuer.bookservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
-import lombok.Data;
+import lombok.Value;
 
 import java.util.List;
 
-@Data
+@Value
 public class BookSearchRequest {
     @JsonAlias("book_id")
     Long bookId;

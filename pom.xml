@@ -17,6 +17,7 @@
         <module>api-gateway</module>
         <module>book-service</module>
         <module>book-search-service</module>
+        <module>notification-service</module>
     </modules>
     <version>0.0.1-SNAPSHOT</version>
     <name>microservices-reader-notes</name>

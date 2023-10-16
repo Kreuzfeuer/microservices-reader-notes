@@ -1,0 +1,22 @@
+application:
+  kafka:
+    topic: plannedBookTopic
+
+
+spring:
+  application:
+    name: notification-service
+  kafka:
+    consumer:
+      group-id: "notification-group"
+      bootstrap-servers: "localhost:9092"
+
+
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+server:
+  port: 0

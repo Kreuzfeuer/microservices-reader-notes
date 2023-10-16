@@ -2,7 +2,6 @@ package com.kreuzfeuer.bookservice.controller;
 
 import com.kreuzfeuer.bookservice.dto.BookRequest;
 import com.kreuzfeuer.bookservice.dto.BookResponse;
-import com.kreuzfeuer.bookservice.dto.BookSearchRequest;
 import com.kreuzfeuer.bookservice.entity.Book;
 import com.kreuzfeuer.bookservice.service.BookService;
 import lombok.RequiredArgsConstructor;
@@ -26,20 +25,6 @@ public class BasicBookController {
         List<Book> listBook = bookService.getListBookByUserId(principal.getName());
 
         return ResponseEntity.ok(listBook.stream().map(BookResponse::mappingFromBook).toList());
-
-    }
-    @GetMapping("/search/book/{name}")
-    public ResponseEntity<List<BookSearchRequest>> getSearchResultsByBookName(
-            @PathVariable("name") String name){
-
-        return ResponseEntity.ok(bookService.getSearchResultsByBookName(name));
-    }
-
-    @GetMapping("/hello")
-    public ResponseEntity<String> helloMethod(Principal principal) {
-
-
-        return ResponseEntity.ok(principal.getName());
 
     }
 

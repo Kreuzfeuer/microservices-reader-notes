@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 
 @Configuration
 @EnableWebSecurity
-public class ResourceServerConfig {
+public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http, Converter<Jwt, ? extends AbstractAuthenticationToken> jwtAuthenticationConverter) throws Exception {
 
