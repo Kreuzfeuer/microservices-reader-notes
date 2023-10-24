@@ -9,10 +9,10 @@
 
 #### Planned to add
 
-1) Email sender service with Kafka +
+1) Rework the application and security configuration for convenient application testing
 2) Circuit Breaker for modules
-3) Create logging and monitoring system (Sleuth and Zipkin)
-4) Set up configurations, finish Keycloak settings, add tests, maybe create scipts to quick testing
+3) Create logging and monitoring system (SLF4J and  Spring Sleuth with Zipkin)
+4) Add tests, ***maybe create scipts to quick testing
 5) *** Maybe add Prometheus and graphana
 6) *** Maybe Kubernets
 
@@ -26,3 +26,6 @@ At the moment, two functional services are ready :
 2) Book search service - a service for using an external API with a connection to Goodreads.com. I am
    using [this API](https://rapidapi.com/roftcomp-laGmBwlWLm/api/hapi-books).
 3) Notification service - "mock" of a real email sender service.
+
+### How to test this application
+Unfortunately, I'm still working on the KeyCloak integration because I don't want you to have to use Postman Interceptor for testing, and I don't want to develop the frontend for the application just yet.
