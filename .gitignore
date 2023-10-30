@@ -4,6 +4,10 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+#data Postgres
+/pgdata
+/book-service/pgdata
+
 ### STS ###
 .apt_generated
 .classpath

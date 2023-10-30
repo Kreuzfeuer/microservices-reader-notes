@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
 
-  db:
+  book-service-db:
     image: postgres:15
     container_name: "book-service-db"
     restart: always

@@ -9,8 +9,13 @@ spring:
           predicates:
             - Path=/api/v1/book-service/**
       default-filters: TokenRelay=
+
   security:
     oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8880/realms/microservice-reader-notes/protocol/openid-connect/certs
+          issuer-uri: http://localhost:8880/realms/microservice-reader-notes
       client:
         provider:
           my-keycloak-provider:
@@ -21,7 +26,7 @@ spring:
 
 
         registration:
-          keycloak-spring-gateway-client:
+          spring-gateway-client:
             provider: my-keycloak-provider
             scope: openid
             client-id: spring-gateway-application
