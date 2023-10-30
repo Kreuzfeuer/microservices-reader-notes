@@ -26,6 +26,11 @@ public class BookServiceImpl implements BookService {
         return bookRepository.getAllBookByUserId(userId);
     }
 
+    @Override
+    public Book getBookByIdAndUserId(long id, String userId) {
+        return bookRepository.getBookByIdAndUserId(id, userId);
+    }
+
     @Transactional
     public Long deleteBookByIdAndUserId(Long id, String userId) {
         return bookRepository.deleteBookByIdAndUserId(id, userId);

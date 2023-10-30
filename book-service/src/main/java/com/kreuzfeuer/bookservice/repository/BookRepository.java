@@ -11,4 +11,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     Long deleteBookByIdAndUserId(Long id, String userId);
 
     Book save(Book book);
+
+    Book getBookByIdAndUserId(Long id, String userId);
 }

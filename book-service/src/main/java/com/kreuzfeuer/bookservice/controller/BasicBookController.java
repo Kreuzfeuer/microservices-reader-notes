@@ -2,6 +2,7 @@ package com.kreuzfeuer.bookservice.controller;
 
 import com.kreuzfeuer.bookservice.dto.BookRequest;
 import com.kreuzfeuer.bookservice.dto.BookResponse;
+import com.kreuzfeuer.bookservice.dto.BookSearchRequest;
 import com.kreuzfeuer.bookservice.entity.Book;
 import com.kreuzfeuer.bookservice.service.BookService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController()
-@RequestMapping("/book-service")
+@RequestMapping("/api/v1/book-service")
 @RequiredArgsConstructor
 public class BasicBookController {
 
@@ -26,6 +27,22 @@ public class BasicBookController {
 
         return ResponseEntity.ok(listBook.stream().map(BookResponse::mappingFromBook).toList());
 
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<BookResponse> getBookById(@PathVariable("id") Long id, Principal principal) {
+
+        Book book = bookService.getBookByIdAndUserId(id, principal.getName());
+
+        return ResponseEntity.ok(BookResponse.mappingFromBook(book));
+
+    }
+
+    @GetMapping("/search/book/{name}")
+    public ResponseEntity<List<BookSearchRequest>> getSearchResultsByBookName(
+            @PathVariable("name") String name) {
+
+        return ResponseEntity.ok(bookService.getSearchResultsByBookName(name));
     }
 
     @DeleteMapping("/book-delete/{id}")

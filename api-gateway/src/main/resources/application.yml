@@ -5,9 +5,9 @@ spring:
     gateway:
       routes:
         - id: book-service
-          uri: lb://book-service/book-service/
+          uri: lb://book-service/
           predicates:
-            - Path=/book-service/**
+            - Path=/api/v1/book-service/**
       default-filters: TokenRelay=
   security:
     oauth2:

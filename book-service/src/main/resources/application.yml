@@ -2,8 +2,7 @@ spring:
   application:
     name: book-service
   datasource:
-    url: jdbc:postgresql://localhost:5433/microservice_test
-
+    url: jdbc:postgresql://localhost:5435/book
     username: postgres
     password: 148
 
