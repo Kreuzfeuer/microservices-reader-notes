@@ -71,9 +71,9 @@ services:
     networks:
       - keycloak-network
 
-  keycloak:
+   keycloak:
     container_name: keycloak
-    build: ./keycloak/
+    image: quay.io/keycloak/keycloak:22.0.3
     restart: unless-stopped
     environment:
       KC_DB: postgres
@@ -84,7 +84,9 @@ services:
       KC_DB_SCHEMA: public
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
-    entrypoint: /opt/keycloak/bin/kc.sh start-dev
+    command: ["start-dev", "--import-realm"]
+    volumes:
+      - ./keycloak/realms/:/opt/keycloak/data/import/
     ports:
       - 8880:8080
       - 80:8443
