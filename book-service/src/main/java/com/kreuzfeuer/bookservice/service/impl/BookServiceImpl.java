@@ -22,6 +22,7 @@ public class BookServiceImpl implements BookService {
     private final BookSearchClient bookSearchClient;
     private final KafkaTemplate<String, AddPlannedBookEvent> kafkaTemplate;
 
+    @Override
     public List<Book> getListBookByUserId(String userId) {
         return bookRepository.getAllBookByUserId(userId);
     }
@@ -31,11 +32,13 @@ public class BookServiceImpl implements BookService {
         return bookRepository.getBookByIdAndUserId(id, userId);
     }
 
+    @Override
     @Transactional
     public Long deleteBookByIdAndUserId(Long id, String userId) {
         return bookRepository.deleteBookByIdAndUserId(id, userId);
     }
 
+    @Override
     public Book saveWithUserId(Book book, String userId) {
         if (book.getStatus() == BookStatus.PLANNED) {
             kafkaTemplate.send("plannedBookTopic", new AddPlannedBookEvent(userId,
@@ -46,10 +49,12 @@ public class BookServiceImpl implements BookService {
         return bookRepository.save(book);
     }
 
+    @Override
     public List<BookSearchRequest> getSearchResultsByBookName(String name) {
         return bookSearchClient.getResultOfSearchingBooksByName(name);
     }
 
+    @Override
     public Book putBookWithIdAndUserLogin(Long id, Book book, String userId) {
         book.setId(id);
         book.setUserId(userId);

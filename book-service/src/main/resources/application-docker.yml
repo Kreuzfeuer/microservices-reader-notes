@@ -1,0 +1,21 @@
+server:
+  port: 8080
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://discovery-server:8761/eureka/
+
+management:
+  zipkin:
+    tracing:
+      endpoint: http://tempo:9411
+spring:
+  datasource:
+    url: jdbc:postgresql://book-service-db:5435/book
+  kafka:
+    bootstrap-servers: broker:29092
+
+keycloak:
+  base-url: http://keycloak:8880
+

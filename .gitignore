@@ -7,7 +7,9 @@ target/
 #data Postgres
 /pgdata
 /book-service/pgdata
-
+/book-service-db
+/db-keycloak-data
+/docker/tempo/tempo-data
 ### STS ###
 .apt_generated
 .classpath

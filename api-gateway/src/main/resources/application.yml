@@ -1,3 +1,6 @@
+keycloak:
+  base-url: http://localhost:8880
+
 spring:
   application:
     name: api-gateway
@@ -8,36 +11,48 @@ spring:
           uri: lb://book-service/
           predicates:
             - Path=/api/v1/book-service/**
-      default-filters: TokenRelay=
-
+#      default-filters: TokenRelay=
   security:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: http://localhost:8880/realms/microservice-reader-notes/protocol/openid-connect/certs
-          issuer-uri: http://localhost:8880/realms/microservice-reader-notes
-      client:
-        provider:
-          my-keycloak-provider:
-            issuer-uri: http://localhost:8880/realms/microservice-reader-notes
-            token-uri: http://localhost:8880/realms/microservice-reader-notes/protocol/openid-connect/token
-            authorization-uri: http://localhost:8880/realms/microservice-reader-notes/protocol/openid-connect/auth
-            user-info-uri: http://localhost:8880/realms/microservice-reader-notes/protocol/openid-connect/userinfo
+          jwk-set-uri: ${keycloak.base-url}/realms/microservice-reader-notes/protocol/openid-connect/certs
+          issuer-uri: ${keycloak.base-url}/realms/microservice-reader-notes
 
 
-        registration:
-          spring-gateway-client:
-            provider: my-keycloak-provider
-            scope: openid
-            client-id: spring-gateway-application
-            client-secret: BzdSQto9KW1IFKP2gB2BkjhkKisu5P5O
-            authorization-grant-type: authorization_code
-            redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"
+#Tracing, logging and monitoring configs
+management:
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+          - metrics
+          - prometheus
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+  observations:
+    key-values:
+      application: ${spring.application.name}
+
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
 
 
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
 server:
   port: 8088
+

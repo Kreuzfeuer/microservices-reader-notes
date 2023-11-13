@@ -34,7 +34,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
 
         http.authorizeHttpRequests(accessManagement -> accessManagement
-                .requestMatchers("/actuator/health/readiness", "/actuator/health/liveness").permitAll()
+                .requestMatchers("/actuator/*").permitAll()
                 .anyRequest().authenticated()
         );
 
@@ -46,7 +46,7 @@ public class SecurityConfig {
     static class JwtGrantedAuthoritiesConverter implements Converter<Jwt, Collection<? extends GrantedAuthority>> {
 
         @Override
-        @SuppressWarnings({"rawtypes", "unchecked"})
+
         public Collection<? extends GrantedAuthority> convert(Jwt jwt) {
             return Stream.of("$.realm_access.roles", "$.resource_access.*.roles").flatMap(claimPaths -> {
                         Object claim;

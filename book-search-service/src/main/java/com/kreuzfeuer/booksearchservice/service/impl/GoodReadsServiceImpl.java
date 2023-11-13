@@ -25,6 +25,7 @@ public class GoodReadsServiceImpl implements GoodReadsService {
 
     private final WebClient webClient = WebClient.builder().build();
 
+    @Override
     public Mono<List<HApiBookResponse>> getBookByName(String name) {
         return webClient.get()
                 .uri(uri + name.replace(' ', '+'))
