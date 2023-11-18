@@ -36,3 +36,4 @@ I created a docker-compose file with the Book-service database, keycloak with db
      - Api-gateway
      - Book-service
      - Book-search-service and Notification-service
+3) Go to localhost:8085, create an account, log in and work with notes
