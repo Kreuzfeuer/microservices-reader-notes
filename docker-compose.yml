@@ -71,7 +71,7 @@ services:
     networks:
       - keycloak-network
 
-   keycloak:
+  keycloak:
     container_name: keycloak
     image: quay.io/keycloak/keycloak:22.0.3
     restart: unless-stopped
