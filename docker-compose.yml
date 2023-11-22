@@ -15,7 +15,7 @@ services:
       PGDATA: "/var/lib/postgresql/data/pgdata"
       PGPORT: 5435
     volumes:
-      - .:/var/lib/postgresql/data
+      - ./book-service-db:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres -d book" ]
       interval: 15s
@@ -60,16 +60,14 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - D:/microservices-reader-notes/db:/var/lib/postgresql/data
+      - ./db-keycloak-data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: keycloak
       POSTGRES_USER: keycloak
       POSTGRES_PASSWORD: keypass
       PGDATA: /var/lib/postgresql/data
-    healthcheck:
-      test: "exit 0"
-    networks:
-      - keycloak-network
+
+
 
   keycloak:
     container_name: keycloak
@@ -86,15 +84,12 @@ services:
       KEYCLOAK_ADMIN_PASSWORD: admin
     command: ["start-dev", "--import-realm"]
     volumes:
-      - ./keycloak/realms/:/opt/keycloak/data/import/
+      - ./docker/keycloak/realms/:/opt/keycloak/data/import/
     ports:
-      - 8880:8080
+      - "8080:8080"
       - 80:8443
-    networks:
-      - keycloak-network
     depends_on:
-      db-keycloak:
-        condition: service_healthy
+     - db-keycloak
 
   front-app:
     restart: always
@@ -104,7 +99,104 @@ services:
     ports:
       - '8085:80'
 
+  tempo:
+    image: grafana/tempo:2.2.2
+    command: [ "-config.file=/etc/tempo.yaml" ]
+    volumes:
+      - ./docker/tempo/tempo.yml:/etc/tempo.yaml:ro
+      - ./docker/tempo/tempo-data:/tmp/tempo
+    ports:
+      - "3110:3100"  # Tempo
+      - "9411:9411" # zipkin
 
-networks:
-  keycloak-network:
-    driver: bridge
+  loki:
+    image: grafana/loki:main
+    command: [ "-config.file=/etc/loki/local-config.yaml" ]
+    ports:
+      - "3100:3100"
+
+  prometheus:
+    image: prom/prometheus:v2.46.0
+    command:
+      - --enable-feature=exemplar-storage
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana:10.1.0
+    volumes:
+      - ./docker/grafana:/etc/grafana/provisioning/datasources:ro
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+    ports:
+      - "3000:3000"
+
+  ## Eureka Server
+  discovery-server:
+    image: microservices-reader-notes/discovery-server:latest
+    container_name: discovery-server
+    ports:
+      - "8761:8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - tempo
+
+  api-gateway:
+    image: microservices-reader-notes/api-gateway:latest
+    container_name: api-gateway
+    ports:
+      - "8088:8088"
+    expose:
+      - "8088"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - tempo
+      - discovery-server
+      - keycloak
+
+  ## Book-Service Docker Compose Config
+  book-service:
+    container_name: book-service
+    image: microservices-reader-notes/book-service:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://book-service-db:5435/book
+    depends_on:
+      - book-service-db
+      - broker
+      - tempo
+      - discovery-server
+      - api-gateway
+
+  ## Book-search-Service Docker Compose Config
+  book-search-service:
+    container_name: book-search-service
+    image: microservices-reader-notes/book-search-service:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - rapidApi.uri= "https://hapi-books.p.rapidapi.com/search/"
+      - rapidApi.headers.key= 24301918e9msh9d3679d0bbc2bfep14b33ajsn3790aaeac139
+      - rapidApi.headers.key.host= hapi-books.p.rapidapi.com
+    depends_on:
+      - tempo
+      - discovery-server
+      - api-gateway
+
+  ## Notification-Service Docker Compose Config
+  notification-service:
+    container_name: notification-service
+    image: microservices-reader-notes/notification-service:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - tempo
+      - broker
+      - discovery-server
+      - api-gateway

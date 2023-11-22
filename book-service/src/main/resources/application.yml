@@ -2,10 +2,9 @@ spring:
   application:
     name: book-service
   datasource:
-    url: jdbc:postgresql://localhost:5435/book
     username: postgres
     password: 148
-
+    url: jdbc:postgresql://localhost:5435/book
   jpa:
     show-sql: true
     hibernate:
@@ -14,7 +13,7 @@ spring:
     oauth2:
       resource-server:
         jwt:
-          issuer-uri: http://localhost:8880/realms/microservice-reader-notes
+          issuer-uri: ${keycloak.base-url}/realms/microservice-reader-notes
   kafka:
     bootstrap-servers: localhost:9092
     template:
@@ -29,10 +28,40 @@ spring:
               mapping:
                 event:com.kreuzfeuer.bookservice.event.AddPlannedBookEvent
 
+
+keycloak:
+  base-url: http://localhost:8880
+
+
+#Tracing, logging and monitoring configs
+management:
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+          - metrics
+          - prometheus
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+  observations:
+    key-values:
+      application: ${spring.application.name}
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
 server:
   port: 0
-
-
-#Discovery clients settings
-
-

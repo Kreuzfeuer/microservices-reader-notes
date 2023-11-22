@@ -46,7 +46,7 @@ public class BasicBookController {
     }
 
     @DeleteMapping("/book-delete/{id}")
-    public ResponseEntity<?> deleteBook(@PathVariable("id") Long id, Principal principal) {
+    public ResponseEntity<? extends Object> deleteBook(@PathVariable("id") Long id, Principal principal) {
         if (bookService.deleteBookByIdAndUserId(id, principal.getName()) == 0) {
             return ResponseEntity.status(204).build();
         }
@@ -64,7 +64,7 @@ public class BasicBookController {
         return ResponseEntity.ok(BookResponse.mappingFromBook(savedBook));
     }
 
-    //TODO: f a new resource is created, the origin server MUST inform the client with a 201 (Created)
+    //TODO:  a new resource is created, the origin server MUST inform the client with a 201 (Created)
     // status code. If an existing resource has been modified, status codes 200 (OK)
     // or 204 (No Content) SHOULD be returned to indicate to the client that the request was successful.
     // If the resource cannot be created or modified, an appropriate error code MUST be returned

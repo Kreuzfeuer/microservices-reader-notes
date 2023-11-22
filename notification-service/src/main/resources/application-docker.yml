@@ -1,0 +1,16 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://discovery-server:8761/eureka/
+management:
+  zipkin:
+    tracing:
+      endpoint: http://tempo:9411
+
+server:
+  port: 8080
+
+spring:
+  kafka:
+    consumer:
+      bootstrap-servers: broker:29092

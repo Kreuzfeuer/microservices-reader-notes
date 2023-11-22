@@ -10,7 +10,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 
@@ -19,25 +19,20 @@ public class SecurityConfig {
 
     @Bean
     public SecurityWebFilterChain securityFilterChain(ServerHttpSecurity httpSecurity) {
-        return httpSecurity.cors(spec -> spec.configurationSource(corsConfigurationSource()))
-                .csrf(ServerHttpSecurity.CsrfSpec::disable)
-                .authorizeExchange(exchange -> exchange.pathMatchers("/actuator/*").permitAll())
-                .authorizeExchange(exchange -> exchange.anyExchange().authenticated())
-                .oauth2ResourceServer(spec -> spec.jwt(Customizer.withDefaults()))
-                .oauth2Client(Customizer.withDefaults())
-                .build();
+        return httpSecurity.cors(spec -> spec.configurationSource(corsConfigurationSource())).csrf(ServerHttpSecurity.CsrfSpec::disable).authorizeExchange(exchange -> exchange.pathMatchers("/actuator/*").permitAll()).authorizeExchange(exchange -> exchange.anyExchange().authenticated()).oauth2ResourceServer(spec -> spec.jwt(Customizer.withDefaults())).build();
     }
 
     @Bean
-    CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("*"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowedOrigins(List.of("*"));
+        configuration.setAllowedMethods(List.of("*"));
+        configuration.setAllowedHeaders(List.of("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 }
 
 
