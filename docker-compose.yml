@@ -86,7 +86,7 @@ services:
     volumes:
       - ./docker/keycloak/realms/:/opt/keycloak/data/import/
     ports:
-      - "8880:8080"
+      - "8080:8080"
       - 80:8443
     depends_on:
      - db-keycloak

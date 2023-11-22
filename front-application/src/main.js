@@ -15,12 +15,14 @@ const keycloakConfig = {
 }
 const initOptions = {
     onLoad: 'login-required',
-    redirectUri: process.env.VUE_APP_KEYCLOAK_RIDERECT_URI
+    flow: 'standard',
+    pkceMethod: 'S256',
+    checkLoginIframe: false,
 }
 let keycloak = new Keycloak(keycloakConfig)
 const keycloakStore = useKeycloakStore()
 keycloakStore.keycloak = keycloak
-
+console.log(keycloakConfig)
 keycloak.init(initOptions).then(auth => {
     if (!auth) {
         console.warn("Authentication failed")
@@ -39,13 +41,17 @@ keycloak.init(initOptions).then(auth => {
             console.error('Failed to refresh token');
         });
     }, 6000)
-}).catch(() => console.error("Authentication failed"))
+}).catch((e) =>{
+ console.error(e);
+ console.error("Authentication failed")
+});
 
 
 axios.interceptors.request.use( async config => {
     const token = await useKeycloakStore().keycloak?.token
     config.headers['Authorization'] = `Bearer ${token}`
     config.headers['Access-Control-Allow-Origin'] = '*'
+    console.log(token)
     return config
 })
 

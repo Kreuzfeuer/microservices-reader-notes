@@ -17,7 +17,7 @@ spring:
       resourceserver:
         jwt:
           jwk-set-uri: ${keycloak.base-url}/realms/microservice-reader-notes/protocol/openid-connect/certs
-          issuer-uri: ${keycloak.base-url}/realms/microservice-reader-notes
+#          issuer-uri: ${keycloak.base-url}/realms/microservice-reader-notes
 
 
 #Tracing, logging and monitoring configs
