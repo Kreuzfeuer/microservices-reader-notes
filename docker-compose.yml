@@ -60,7 +60,7 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - D:/microservices-reader-notes/db:/var/lib/postgresql/data
+      - ./keycloak-db:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: keycloak
       POSTGRES_USER: keycloak
