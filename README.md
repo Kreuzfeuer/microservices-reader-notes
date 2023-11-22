@@ -9,11 +9,9 @@
 5) Front-end just for test api 
 #### Planned to add
 
-1) Circuit Breaker for modules
-2) Create logging and monitoring system (SLF4J and  Spring Sleuth with Zipkin)
-3) Add tests, ***maybe create scipts to quick testing with docker
-4) *** Maybe add Prometheus and graphana
-5) *** Maybe Kubernets
+1) Configuration Prometheus and Graphana
+2) Book-service with MongoDB
+3) Maybe check K8s
 ### Application explanation
 
 At the moment, 3 functional services are ready :
@@ -30,10 +28,13 @@ And an additional external application "front-application' in Vue 3 with Axios a
 I created a docker-compose file with the Book-service database, keycloak with db, Kafka with zookeeper and NGINX with the front-end application
 ### How to test this application
 
-1) Run the docker-compose file in the root directory - `docker-compose up`
-2) Run the microservices with the command `mvn Spring-boot:run` in their root directories in the following order:
-     - Discovery-service
-     - Api-gateway
-     - Book-service
-     - Book-search-service and Notification-service
-3) Go to `localhost:8085` , create an account, log in and work with notes
+1) Run the `mvn clean package -DskipTest` in the root directory
+2)  Append this to the end of the host file: `127.0.0.1    keycloak`
+
+   Windows: `C:\Windows\System32\drivers\etc\hosts`
+
+   Linux: `/etc/hosts`
+
+  
+3) Run the docker-compose file in the root directory - `docker compose up`
+4) Go to `localhost:8085` , create an account, log in and work with notes
