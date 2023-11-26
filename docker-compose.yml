@@ -18,10 +18,10 @@ services:
       - ./book-service-db:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres -d book" ]
-      interval: 15s
-      timeout: 10s
+      interval: 10s
+      timeout: 5s
       retries: 7
-      start_period: 12s
+      start_period: 10s
 
     deploy:
       resources:
@@ -45,6 +45,12 @@ services:
       - "9092:9092"
     depends_on:
       - zookeeper
+    healthcheck:
+      test: nc -z localhost 9092 || exit -1
+      start_period: 15s
+      interval: 5s
+      timeout: 10s
+      retries: 10
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
@@ -169,11 +175,18 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=jdbc:postgresql://book-service-db:5435/book
     depends_on:
-      - book-service-db
-      - broker
-      - tempo
-      - discovery-server
-      - api-gateway
+      book-service-db:
+        condition: service_healthy
+      broker:
+        condition: service_completed_successfully
+      discovery-server:
+        condition: service_started
+      tempo:
+        condition: service_started
+      api-gateway:
+        condition: service_started
+
+
 
   ## Book-search-Service Docker Compose Config
   book-search-service:
@@ -193,7 +206,11 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
-      - tempo
-      - broker
-      - discovery-server
-      - api-gateway
+      broker:
+        condition: service_healthy
+      discovery-server:
+        condition: service_started
+      api-gateway:
+        condition: service_started
+      tempo:
+        condition: service_started
