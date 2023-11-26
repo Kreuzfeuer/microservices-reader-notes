@@ -17,7 +17,7 @@ import java.util.List;
 public class GoodReadsServiceImpl implements GoodReadsService {
 
     @Value("${rapidApi.uri}")
-    private String uri;
+    private String url;
     @Value("${rapidApi.headers.key}")
     private String key;
     @Value("${rapidApi.headers.host}")
@@ -28,13 +28,14 @@ public class GoodReadsServiceImpl implements GoodReadsService {
     @Override
     public Mono<List<HApiBookResponse>> getBookByName(String name) {
         return webClient.get()
-                .uri(uri + name.replace(' ', '+'))
-                .header("X-RapidAPI-Key", key)
+                .uri(url + name.replace(' ', '+'))
+                .header("X-RapidAPI-Key", key.strip())
                 .header("X-RapidAPI-Host", host)
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<List<HApiBookResponse>>() {
                 })
-                .publishOn(Schedulers.boundedElastic());
+                .publishOn(Schedulers.boundedElastic())
+                .log();
 
 
     }

@@ -6,8 +6,8 @@ spring:
 rapidApi:
   uri: "https://hapi-books.p.rapidapi.com/search/"
   headers:
-    key: 24301918e9msh9d3679d0bbc2bfep14b33ajsn3790aaeac139
-    host: hapi-books.p.rapidapi.com
+    key: "24301918e9msh9d3679d0bbc2bfep14b33ajsn3790aaeac139"
+    host: "hapi-books.p.rapidapi.com"
 
 
 #Tracing, logging and monitoring configs

@@ -181,9 +181,6 @@ services:
     image: microservices-reader-notes/book-search-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - rapidApi.uri= "https://hapi-books.p.rapidapi.com/search/"
-      - rapidApi.headers.key= 24301918e9msh9d3679d0bbc2bfep14b33ajsn3790aaeac139
-      - rapidApi.headers.key.host= hapi-books.p.rapidapi.com
     depends_on:
       - tempo
       - discovery-server
