@@ -178,7 +178,7 @@ services:
       book-service-db:
         condition: service_healthy
       broker:
-        condition: service_completed_successfully
+        condition: service_healthy
       discovery-server:
         condition: service_started
       tempo:
